@@ -7,8 +7,9 @@ import (
 )
 
 type searchOption struct {
-	byDistrictID *uuid.UUID
-	byAny        *string
+	byFamilyCardNumber *string
+	byDistrictID       *uuid.UUID
+	byAny              *string
 }
 
 type paginationOption struct {
@@ -21,6 +22,12 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 	limit := 0
 
 	if search != nil {
+		if search.byFamilyCardNumber != nil && len(*search.byFamilyCardNumber) > 0 {
+			where = append(where, pg.Where{
+				Query: "family_card_number = ?",
+				Args:  []interface{}{search.byFamilyCardNumber},
+			})
+		}
 		if search.byDistrictID != nil && len(*search.byDistrictID) > 0 {
 			where = append(where, pg.Where{
 				Query: "district_id = ?",
@@ -30,7 +37,7 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 		if search.byAny != nil && len(*search.byAny) > 0 {
 			where = append(where, pg.Where{
 				Query: "medical_record_number ILIKE ? OR family_card_number ILIKE ? OR population_identification_number ILIKE ? OR name ILIKE ?",
-				Args:  []interface{}{search, search, search, search},
+				Args:  []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
 			})
 		}
 	}

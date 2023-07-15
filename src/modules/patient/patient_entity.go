@@ -9,22 +9,23 @@ import (
 
 type PatientModel struct {
 	*pg.Model
-	MedicalRecordNumber            *string    `json:"medicalRecordNumber"`
-	FamilyCardNumber               *string    `json:"familyCardNumber"`
-	PopulationIdentificationNumber *string    `json:"populationIdentificationNumber"`
-	Name                           *string    `json:"name"`
-	Gender                         *gender    `json:"gender"`
-	PlaceOfBirth                   *string    `json:"placeOfBirth"`
-	DateOfBirth                    *time.Time `json:"dateOfBirth"`
-	Address                        *string    `json:"address"`
-	DistrictID                     *uuid.UUID `json:"districtId"`
-	Job                            *string    `json:"job"`
-	Religion                       *string    `json:"religion"`
-	BloodGroup                     *string    `json:"bloodGroup"`
-	Insurence                      *string    `json:"insurence"`
-	InsurenceNumber                *string    `json:"insurenceNumber"`
-	Phone                          *string    `json:"phone"`
-	LastHealthCheckTime            *time.Time `json:"lastHealthCheckTime"`
+	MedicalRecordNumber            *string               `json:"medicalRecordNumber"`
+	FamilyCardNumber               *string               `json:"familyCardNumber"`
+	RelationshipInFamily           *relationshipInFamily `json:"relationshipInFamily"`
+	PopulationIdentificationNumber *string               `json:"populationIdentificationNumber"`
+	Name                           *string               `json:"name"`
+	Gender                         *gender               `json:"gender"`
+	PlaceOfBirth                   *string               `json:"placeOfBirth"`
+	DateOfBirth                    *time.Time            `json:"dateOfBirth"`
+	Address                        *string               `json:"address"`
+	DistrictID                     *uuid.UUID            `json:"districtId"`
+	Job                            *string               `json:"job"`
+	Religion                       *string               `json:"religion"`
+	BloodGroup                     *string               `json:"bloodGroup"`
+	Insurence                      *string               `json:"insurence"`
+	InsurenceNumber                *string               `json:"insurenceNumber"`
+	Phone                          *string               `json:"phone"`
+	LastHealthCheckTime            *time.Time            `json:"lastHealthCheckTime"`
 }
 
 func (PatientModel) TableName() string {

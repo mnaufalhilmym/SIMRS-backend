@@ -17,8 +17,8 @@ func (m *Module) getDistrictListService(pagination *paginationOption, search *st
 
 	if search != nil && len(*search) > 0 {
 		where = append(where, pg.Where{
-			Query: "medical_record_number ILIKE ? OR family_card_number ILIKE ? OR population_identification_number ILIKE ? OR name ILIKE ?",
-			Args:  []interface{}{search, search, search, search},
+			Query: "name ILIKE ?",
+			Args:  []interface{}{"%" + *search + "%"},
 		})
 	}
 

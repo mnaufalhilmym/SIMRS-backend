@@ -22,7 +22,7 @@ func (m *Module) getAccountListService(pagination *paginationOption, search *str
 	if search != nil && len(*search) > 0 {
 		where = append(where, pg.Where{
 			Query: "name ILIKE ? OR username ILIKE ? OR role ILIKE ?",
-			Args:  []interface{}{search, search, search},
+			Args:  []interface{}{"%" + *search + "%", "%" + *search + "%", "%" + *search + "%"},
 		})
 	}
 

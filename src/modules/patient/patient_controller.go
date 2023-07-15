@@ -35,8 +35,9 @@ func (m *Module) getPatientList(c *fiber.Ctx) error {
 		limit:  query.Limit,
 		lastID: query.LastID,
 	}, &searchOption{
-		byDistrictID: query.SearchByDistrictID,
-		byAny:        query.Search,
+		byFamilyCardNumber: query.SearchByFamilyCardNumber,
+		byDistrictID:       query.SearchByDistrictID,
+		byAny:              query.Search,
 	})
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -119,6 +120,7 @@ func (m *Module) addPatient(c *fiber.Ctx) error {
 	patientDetailData, err := m.addPatientService(&PatientModel{
 		MedicalRecordNumber:            req.MedicalRecordNumber,
 		FamilyCardNumber:               req.FamilyCardNumber,
+		RelationshipInFamily:           req.RelationshipInFamily,
 		PopulationIdentificationNumber: req.PopulationIdentificationNumber,
 		Name:                           req.Name,
 		Gender:                         req.Gender,
@@ -166,6 +168,7 @@ func (m *Module) updatePatient(c *fiber.Ctx) error {
 		},
 		MedicalRecordNumber:            req.MedicalRecordNumber,
 		FamilyCardNumber:               req.FamilyCardNumber,
+		RelationshipInFamily:           req.RelationshipInFamily,
 		PopulationIdentificationNumber: req.PopulationIdentificationNumber,
 		Name:                           req.Name,
 		Gender:                         req.Gender,

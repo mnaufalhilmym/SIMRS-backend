@@ -25,7 +25,7 @@ func (m *Module) getPatientExaminationListService(pagination *paginationOption, 
 	if search != nil && len(*search) > 0 {
 		where = append(where, pg.Where{
 			Query: "examination_time ILIKE ? OR examination ILIKE ? OR treatment ILIKE ?",
-			Args:  []interface{}{search, search, search, search},
+			Args:  []interface{}{"%" + *search + "%", "%" + *search + "%", "%" + *search + "%"},
 		})
 	}
 
