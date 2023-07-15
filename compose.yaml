@@ -1,0 +1,17 @@
+services:
+  database:
+    container_name: si-petruk_pg
+    image: docker.io/postgres:alpine
+    restart: unless-stopped
+    networks:
+      - si-petruk_network
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    env_file: .env
+    environment:
+      TZ: Asia/Jakarta
+
+networks:
+  si-petruk_network:
