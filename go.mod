@@ -1,4 +1,4 @@
-module sim-puskesmas
+module simrs
 
 go 1.20
 

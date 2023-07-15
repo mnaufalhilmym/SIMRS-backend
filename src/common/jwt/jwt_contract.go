@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	accountrole "sim-puskesmas/src/common/account_role"
+	accountrole "simrs/src/common/account_role"
 
 	"github.com/google/uuid"
 )

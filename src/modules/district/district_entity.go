@@ -1,6 +1,6 @@
 package district
 
-import "sim-puskesmas/src/libs/db/pg"
+import "simrs/src/libs/db/pg"
 
 type DistrictModel struct {
 	*pg.Model

@@ -1,15 +1,16 @@
 package patient
 
 import (
-	"sim-puskesmas/src/libs/db/pg"
+	"simrs/src/libs/db/pg"
 
 	"github.com/google/uuid"
 )
 
 type searchOption struct {
-	byFamilyCardNumber *string
-	byDistrictID       *uuid.UUID
-	byAny              *string
+	byFamilyCardNumber     *string
+	byRelationshipInFamily *relationshipInFamily
+	byDistrictID           *uuid.UUID
+	byAny                  *string
 }
 
 type paginationOption struct {
@@ -26,6 +27,12 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 			where = append(where, pg.Where{
 				Query: "family_card_number = ?",
 				Args:  []interface{}{search.byFamilyCardNumber},
+			})
+		}
+		if search.byRelationshipInFamily != nil && len(*search.byRelationshipInFamily) > 0 {
+			where = append(where, pg.Where{
+				Query: "byRelationship_in_family = ?",
+				Args:  []interface{}{search.byRelationshipInFamily},
 			})
 		}
 		if search.byDistrictID != nil && len(*search.byDistrictID) > 0 {
@@ -74,14 +81,34 @@ func (m *Module) getPatientDetailService(id *uuid.UUID) (*PatientModel, error) {
 	})
 }
 
-func (m *Module) getPatientCountService(districtId *uuid.UUID) (*int64, error) {
+func (m *Module) getPatientCountService(search *searchOption) (*int64, error) {
 	where := []pg.Where{}
 
-	if districtId != nil && len(*districtId) > 0 {
-		where = append(where, pg.Where{
-			Query: "district_id = ?",
-			Args:  []interface{}{districtId},
-		})
+	if search != nil {
+		if search.byFamilyCardNumber != nil && len(*search.byFamilyCardNumber) > 0 {
+			where = append(where, pg.Where{
+				Query: "family_card_number = ?",
+				Args:  []interface{}{search.byFamilyCardNumber},
+			})
+		}
+		if search.byRelationshipInFamily != nil && len(*search.byRelationshipInFamily) > 0 {
+			where = append(where, pg.Where{
+				Query: "byRelationship_in_family = ?",
+				Args:  []interface{}{search.byRelationshipInFamily},
+			})
+		}
+		if search.byDistrictID != nil && len(*search.byDistrictID) > 0 {
+			where = append(where, pg.Where{
+				Query: "district_id = ?",
+				Args:  []interface{}{search.byDistrictID},
+			})
+		}
+		if search.byAny != nil && len(*search.byAny) > 0 {
+			where = append(where, pg.Where{
+				Query: "medical_record_number ILIKE ? OR family_card_number ILIKE ? OR population_identification_number ILIKE ? OR name ILIKE ?",
+				Args:  []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+			})
+		}
 	}
 
 	return PatientRepository().Count(&pg.CountOption{

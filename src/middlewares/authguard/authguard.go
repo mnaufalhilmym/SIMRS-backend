@@ -2,10 +2,10 @@ package authguard
 
 import (
 	"context"
-	accountrole "sim-puskesmas/src/common/account_role"
-	"sim-puskesmas/src/common/jwt"
-	"sim-puskesmas/src/helpers"
-	"sim-puskesmas/src/libs/parser"
+	accountrole "simrs/src/common/account_role"
+	"simrs/src/common/jwt"
+	"simrs/src/helpers"
+	"simrs/src/libs/parser"
 
 	"github.com/gofiber/fiber/v2"
 )

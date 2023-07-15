@@ -1,8 +1,8 @@
 package argon2
 
 import (
-	applogger "sim-puskesmas/src/libs/logger"
-	"sim-puskesmas/src/libs/validator"
+	applogger "simrs/src/libs/logger"
+	"simrs/src/libs/validator"
 )
 
 type Config struct {

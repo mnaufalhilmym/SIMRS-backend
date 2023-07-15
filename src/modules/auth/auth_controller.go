@@ -2,12 +2,12 @@ package auth
 
 import (
 	"errors"
-	commonjwt "sim-puskesmas/src/common/jwt"
-	"sim-puskesmas/src/helpers"
-	"sim-puskesmas/src/libs/hash/argon2"
-	"sim-puskesmas/src/libs/jwx/jwt"
-	"sim-puskesmas/src/libs/parser"
-	"sim-puskesmas/src/modules/account"
+	commonjwt "simrs/src/common/jwt"
+	"simrs/src/helpers"
+	"simrs/src/libs/hash/argon2"
+	"simrs/src/libs/jwx/jwt"
+	"simrs/src/libs/parser"
+	"simrs/src/modules/account"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"

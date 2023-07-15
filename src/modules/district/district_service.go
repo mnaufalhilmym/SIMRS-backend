@@ -1,7 +1,7 @@
 package district
 
 import (
-	"sim-puskesmas/src/libs/db/pg"
+	"simrs/src/libs/db/pg"
 
 	"github.com/google/uuid"
 )

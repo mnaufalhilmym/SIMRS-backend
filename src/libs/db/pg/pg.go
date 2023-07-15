@@ -1,9 +1,9 @@
 package pg
 
 import (
-	"sim-puskesmas/src/libs/exithandler"
-	applogger "sim-puskesmas/src/libs/logger"
-	"sim-puskesmas/src/libs/validator"
+	"simrs/src/libs/exithandler"
+	applogger "simrs/src/libs/logger"
+	"simrs/src/libs/validator"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -2,7 +2,7 @@ package env
 
 import (
 	"os"
-	applogger "sim-puskesmas/src/libs/logger"
+	applogger "simrs/src/libs/logger"
 
 	_ "github.com/joho/godotenv/autoload"
 )

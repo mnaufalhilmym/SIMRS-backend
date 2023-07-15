@@ -8,5 +8,4 @@ RUN CGO_ENABLED=0 go build -v -o /go/bin/app ./src/
 
 FROM gcr.io/distroless/static-debian11
 COPY --from=build /go/bin/app /
-COPY .env.prod /.env
 CMD [ "/app" ]

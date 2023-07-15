@@ -1,7 +1,7 @@
 package main
 
 import (
-	"sim-puskesmas/src/libs/env"
+	"simrs/src/libs/env"
 
 	"github.com/gofiber/fiber/v2"
 )

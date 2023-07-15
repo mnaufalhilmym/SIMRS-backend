@@ -3,7 +3,7 @@ package argon2
 import (
 	"encoding/base64"
 	"fmt"
-	"sim-puskesmas/src/libs/random"
+	"simrs/src/libs/random"
 
 	"golang.org/x/crypto/argon2"
 )

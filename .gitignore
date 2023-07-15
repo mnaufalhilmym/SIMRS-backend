@@ -2,3 +2,4 @@
 .env
 .env.dev
 .env.prod
+simrs-pg

@@ -3,8 +3,8 @@ package jwt
 import (
 	"crypto/rand"
 	"crypto/rsa"
-	applogger "sim-puskesmas/src/libs/logger"
-	"sim-puskesmas/src/libs/validator"
+	applogger "simrs/src/libs/logger"
+	"simrs/src/libs/validator"
 	"time"
 )
 

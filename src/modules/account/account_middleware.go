@@ -2,8 +2,8 @@ package account
 
 import (
 	"errors"
-	"sim-puskesmas/src/common/jwt"
-	"sim-puskesmas/src/libs/db/pg"
+	"simrs/src/common/jwt"
+	"simrs/src/libs/db/pg"
 	"time"
 
 	"github.com/gofiber/fiber/v2"

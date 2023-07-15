@@ -2,7 +2,7 @@ package parser
 
 import (
 	"errors"
-	"sim-puskesmas/src/libs/jwx/jwt"
+	"simrs/src/libs/jwx/jwt"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"

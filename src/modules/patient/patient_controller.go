@@ -2,12 +2,12 @@ package patient
 
 import (
 	"errors"
-	accountrole "sim-puskesmas/src/common/account_role"
-	"sim-puskesmas/src/helpers"
-	"sim-puskesmas/src/libs/db/pg"
-	"sim-puskesmas/src/libs/parser"
-	"sim-puskesmas/src/middlewares/authguard"
-	"sim-puskesmas/src/modules/account"
+	accountrole "simrs/src/common/account_role"
+	"simrs/src/helpers"
+	"simrs/src/libs/db/pg"
+	"simrs/src/libs/parser"
+	"simrs/src/middlewares/authguard"
+	"simrs/src/modules/account"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -35,9 +35,10 @@ func (m *Module) getPatientList(c *fiber.Ctx) error {
 		limit:  query.Limit,
 		lastID: query.LastID,
 	}, &searchOption{
-		byFamilyCardNumber: query.SearchByFamilyCardNumber,
-		byDistrictID:       query.SearchByDistrictID,
-		byAny:              query.Search,
+		byFamilyCardNumber:     query.SearchByFamilyCardNumber,
+		byRelationshipInFamily: query.SearchByRelationshipInFamily,
+		byDistrictID:           query.SearchByDistrictID,
+		byAny:                  query.Search,
 	})
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -91,7 +92,12 @@ func (m *Module) getPatientCount(c *fiber.Ctx) error {
 		})
 	}
 
-	count, err := m.getPatientCountService(query.DistrictID)
+	count, err := m.getPatientCountService(&searchOption{
+		byFamilyCardNumber:     query.SearchByFamilyCardNumber,
+		byRelationshipInFamily: query.SearchByRelationshipInFamily,
+		byDistrictID:           query.SearchByDistrictID,
+		byAny:                  query.Search,
+	})
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(&response{

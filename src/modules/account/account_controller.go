@@ -2,12 +2,12 @@ package account
 
 import (
 	"errors"
-	accountrole "sim-puskesmas/src/common/account_role"
-	"sim-puskesmas/src/helpers"
-	"sim-puskesmas/src/libs/db/pg"
-	"sim-puskesmas/src/libs/hash/argon2"
-	"sim-puskesmas/src/libs/parser"
-	"sim-puskesmas/src/middlewares/authguard"
+	accountrole "simrs/src/common/account_role"
+	"simrs/src/helpers"
+	"simrs/src/libs/db/pg"
+	"simrs/src/libs/hash/argon2"
+	"simrs/src/libs/parser"
+	"simrs/src/middlewares/authguard"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"

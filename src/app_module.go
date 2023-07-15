@@ -1,17 +1,17 @@
 package main
 
 import (
-	"sim-puskesmas/src/constants"
-	"sim-puskesmas/src/libs/db/pg"
-	"sim-puskesmas/src/libs/env"
-	"sim-puskesmas/src/libs/exithandler"
-	"sim-puskesmas/src/libs/hash/argon2"
-	"sim-puskesmas/src/libs/jwx/jwt"
-	"sim-puskesmas/src/modules/account"
-	"sim-puskesmas/src/modules/auth"
-	"sim-puskesmas/src/modules/district"
-	"sim-puskesmas/src/modules/patient"
-	patientexamination "sim-puskesmas/src/modules/patient_examination"
+	"simrs/src/constants"
+	"simrs/src/libs/db/pg"
+	"simrs/src/libs/env"
+	"simrs/src/libs/exithandler"
+	"simrs/src/libs/hash/argon2"
+	"simrs/src/libs/jwx/jwt"
+	"simrs/src/modules/account"
+	"simrs/src/modules/auth"
+	"simrs/src/modules/district"
+	"simrs/src/modules/patient"
+	patientexamination "simrs/src/modules/patient_examination"
 	"strconv"
 	"time"
 

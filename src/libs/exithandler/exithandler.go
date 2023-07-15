@@ -3,7 +3,7 @@ package exithandler
 import (
 	"os"
 	"os/signal"
-	applogger "sim-puskesmas/src/libs/logger"
+	applogger "simrs/src/libs/logger"
 	"syscall"
 )
 

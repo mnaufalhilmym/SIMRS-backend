@@ -2,7 +2,7 @@ package pg
 
 import (
 	"errors"
-	"sim-puskesmas/src/libs/validator"
+	"simrs/src/libs/validator"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

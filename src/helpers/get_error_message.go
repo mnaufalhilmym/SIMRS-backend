@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"sim-puskesmas/src/constants"
-	"sim-puskesmas/src/libs/env"
+	"simrs/src/constants"
+	"simrs/src/libs/env"
 )
 
 func GetErrorMessage(errMsg ...string) *string {

@@ -1,7 +1,7 @@
 package district
 
 import (
-	applogger "sim-puskesmas/src/libs/logger"
+	applogger "simrs/src/libs/logger"
 
 	"github.com/gofiber/fiber/v2"
 )

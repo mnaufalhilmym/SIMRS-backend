@@ -7,11 +7,12 @@ import (
 )
 
 type getPatientListReqQuery struct {
-	SearchByFamilyCardNumber *string    `query:"searchByFamilyCardNumber"`
-	SearchByDistrictID       *uuid.UUID `query:"searchByDistrictId"`
-	Search                   *string    `query:"search"`
-	Limit                    *int       `query:"limit"`
-	LastID                   *uuid.UUID `query:"lastId"`
+	SearchByFamilyCardNumber     *string               `query:"searchByFamilyCardNumber"`
+	SearchByRelationshipInFamily *relationshipInFamily `query:"searchByRelationshipInFamily"`
+	SearchByDistrictID           *uuid.UUID            `query:"searchByDistrictId"`
+	Search                       *string               `query:"search"`
+	Limit                        *int                  `query:"limit"`
+	LastID                       *uuid.UUID            `query:"lastId"`
 }
 
 type getPatientDetailReqParam struct {
@@ -19,7 +20,10 @@ type getPatientDetailReqParam struct {
 }
 
 type getPatientCountReqQuery struct {
-	DistrictID *uuid.UUID `query:"districtId"`
+	SearchByFamilyCardNumber     *string               `query:"searchByFamilyCardNumber"`
+	SearchByRelationshipInFamily *relationshipInFamily `query:"searchByRelationshipInFamily"`
+	SearchByDistrictID           *uuid.UUID            `query:"searchByDistrictId"`
+	Search                       *string               `query:"search"`
 }
 
 type addPatientReq struct {

@@ -1,10 +1,10 @@
 package account
 
 import (
-	accountrole "sim-puskesmas/src/common/account_role"
-	"sim-puskesmas/src/libs/db/pg"
-	"sim-puskesmas/src/libs/env"
-	"sim-puskesmas/src/libs/hash/argon2"
+	accountrole "simrs/src/common/account_role"
+	"simrs/src/libs/db/pg"
+	"simrs/src/libs/env"
+	"simrs/src/libs/hash/argon2"
 	"time"
 )
 

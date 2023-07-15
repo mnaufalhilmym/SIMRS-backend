@@ -1,5 +1,5 @@
 package parser
 
-import applogger "sim-puskesmas/src/libs/logger"
+import applogger "simrs/src/libs/logger"
 
 var logger = applogger.New("Parser")

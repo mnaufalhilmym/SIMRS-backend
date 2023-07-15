@@ -2,11 +2,11 @@ package main
 
 import (
 	"runtime"
-	"sim-puskesmas/src/constants"
-	"sim-puskesmas/src/helpers"
-	"sim-puskesmas/src/libs/env"
-	"sim-puskesmas/src/libs/exithandler"
-	applogger "sim-puskesmas/src/libs/logger"
+	"simrs/src/constants"
+	"simrs/src/helpers"
+	"simrs/src/libs/env"
+	"simrs/src/libs/exithandler"
+	applogger "simrs/src/libs/logger"
 	"time"
 
 	"github.com/bytedance/sonic"

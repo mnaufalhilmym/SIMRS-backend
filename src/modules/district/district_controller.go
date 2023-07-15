@@ -2,12 +2,12 @@ package district
 
 import (
 	"errors"
-	accountrole "sim-puskesmas/src/common/account_role"
-	"sim-puskesmas/src/helpers"
-	"sim-puskesmas/src/libs/db/pg"
-	"sim-puskesmas/src/libs/parser"
-	"sim-puskesmas/src/middlewares/authguard"
-	"sim-puskesmas/src/modules/account"
+	accountrole "simrs/src/common/account_role"
+	"simrs/src/helpers"
+	"simrs/src/libs/db/pg"
+	"simrs/src/libs/parser"
+	"simrs/src/middlewares/authguard"
+	"simrs/src/modules/account"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"

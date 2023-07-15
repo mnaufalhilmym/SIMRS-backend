@@ -2,7 +2,7 @@ package parser
 
 import (
 	"reflect"
-	"sim-puskesmas/src/libs/validator"
+	"simrs/src/libs/validator"
 
 	"github.com/gofiber/fiber/v2"
 )

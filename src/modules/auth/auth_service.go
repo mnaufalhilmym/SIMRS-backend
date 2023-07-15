@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"sim-puskesmas/src/libs/db/pg"
-	"sim-puskesmas/src/modules/account"
+	"simrs/src/libs/db/pg"
+	"simrs/src/modules/account"
 
 	"github.com/google/uuid"
 )
