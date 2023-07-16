@@ -127,7 +127,38 @@ func (m *Module) updateAccount(c *fiber.Ctx) error {
 		})
 	}
 
-	accountDetailData := &AccountModel{
+	accountDetailData, err := m.getAccountDetailService(param.ID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrNotFound.Error()),
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(&response{
+			Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+		})
+	}
+
+	if *accountDetailData.Role == accountrole.ROLE_SUPERADMIN && *req.Role == accountrole.ROLE_ADMIN {
+		role := accountrole.ROLE_SUPERADMIN
+		accountCount, err := m.countAccount(&searchOption{
+			byRole: &role,
+		})
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+			})
+		}
+
+		if *accountCount <= 1 {
+			err := errors.New("unable to change the role of the last superadmin account")
+			return c.Status(fiber.StatusBadRequest).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrBadRequest.Error()),
+			})
+		}
+	}
+
+	accountDetailData = &AccountModel{
 		Model: &pg.Model{
 			ID: param.ID,
 		},
@@ -146,7 +177,7 @@ func (m *Module) updateAccount(c *fiber.Ctx) error {
 		accountDetailData.Password = encodedHash
 	}
 
-	accountDetailData, err := m.updateAccountService(accountDetailData)
+	accountDetailData, err = m.updateAccountService(accountDetailData)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(&response{
@@ -201,6 +232,7 @@ func (m *Module) deleteAccount(c *fiber.Ctx) error {
 			})
 		}
 	}
+
 	if err := m.deleteAccountService(param.ID); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(&response{
