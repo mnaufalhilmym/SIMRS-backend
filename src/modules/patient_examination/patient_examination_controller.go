@@ -8,6 +8,7 @@ import (
 	"simrs/src/libs/parser"
 	"simrs/src/middlewares/authguard"
 	"simrs/src/modules/account"
+	"simrs/src/modules/patient"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -85,6 +86,31 @@ func (m *Module) addPatientExamination(c *fiber.Ctx) error {
 		})
 	}
 
+	patientDetailData, err := m.getPatientDetailService(req.PatientID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrNotFound.Error()),
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(&response{
+			Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+		})
+	}
+
+	if patientDetailData.LastHealthCheckTime == nil || req.ExaminationTime.After(*patientDetailData.LastHealthCheckTime) {
+		if _, err := m.updatePatientService(&patient.PatientModel{
+			Model: &pg.Model{
+				ID: req.PatientID,
+			},
+			LastHealthCheckTime: req.ExaminationTime,
+		}); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+			})
+		}
+	}
+
 	patientExaminationDetailData, err := m.addPatientExaminationService(&PatientExaminationModel{
 		PatientID:       req.PatientID,
 		ExaminationTime: req.ExaminationTime,
@@ -115,6 +141,40 @@ func (m *Module) updatePatientExamination(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(&response{
 			Error: helpers.GetErrorMessage(err.Error(), fiber.ErrBadRequest.Error()),
 		})
+	}
+
+	if req.ExaminationTime != nil {
+		patientExaminationDetailData, err := m.getPatientExaminationDetailService(param.ID)
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrBadRequest.Error()),
+			})
+		}
+
+		patientDetailData, err := m.getPatientDetailService(patientExaminationDetailData.PatientID)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return c.Status(fiber.StatusNotFound).JSON(&response{
+					Error: helpers.GetErrorMessage(err.Error(), fiber.ErrNotFound.Error()),
+				})
+			}
+			return c.Status(fiber.StatusInternalServerError).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+			})
+		}
+
+		if patientDetailData.LastHealthCheckTime == nil || req.ExaminationTime.After(*patientDetailData.LastHealthCheckTime) {
+			if _, err := m.updatePatientService(&patient.PatientModel{
+				Model: &pg.Model{
+					ID: patientExaminationDetailData.PatientID,
+				},
+				LastHealthCheckTime: req.ExaminationTime,
+			}); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(&response{
+					Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+				})
+			}
+		}
 	}
 
 	patientExaminationDetailData, err := m.updatePatientExaminationService(&PatientExaminationModel{

@@ -2,6 +2,7 @@ package patientexamination
 
 import (
 	"simrs/src/libs/db/pg"
+	"simrs/src/modules/patient"
 
 	"github.com/google/uuid"
 )
@@ -75,4 +76,19 @@ func (m *Module) deletePatientExaminationService(id *uuid.UUID) error {
 			ID: id,
 		},
 	})
+}
+
+func (m *Module) getPatientDetailService(id *uuid.UUID) (*patient.PatientModel, error) {
+	return patient.PatientRepository().FindOne(&pg.FindOneOption{
+		Where: &[]pg.Where{
+			{
+				Query: "id = ?",
+				Args:  []interface{}{id},
+			},
+		},
+	})
+}
+
+func (m *Module) updatePatientService(data *patient.PatientModel) (*patient.PatientModel, error) {
+	return patient.PatientRepository().Update(data)
 }
