@@ -7,9 +7,10 @@ import (
 )
 
 type getAccountListReqQuery struct {
-	Search *string    `query:"search"`
-	Limit  *int       `query:"limit"`
-	LastID *uuid.UUID `query:"lastId"`
+	SearchByAccountRole *accountrole.Role `query:"searchByAccountRole"`
+	Search              *string           `query:"search"`
+	Limit               *int              `query:"limit"`
+	LastID              *uuid.UUID        `query:"lastId"`
 }
 
 type getAccountDetailReqParam struct {

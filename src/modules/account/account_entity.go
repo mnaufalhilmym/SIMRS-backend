@@ -28,7 +28,8 @@ func (*Module) autoMigrate() {
 }
 
 func (m *Module) createInitialAccount() {
-	count, err := m.countAccount()
+	role := accountrole.ROLE_SUPERADMIN
+	count, err := m.countAccount(&searchOption{byRole: &role})
 	if err != nil {
 		logger.Panic(err)
 	}
@@ -43,7 +44,6 @@ func (m *Module) createInitialAccount() {
 	if err != nil {
 		logger.Panic(err)
 	}
-	role := accountrole.ROLE_SUPERADMIN
 
 	if _, err := m.addAccountService(&AccountModel{
 		Name:     &name,

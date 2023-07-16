@@ -1,29 +1,61 @@
 package account
 
 import (
+	accountrole "simrs/src/common/account_role"
 	"simrs/src/libs/db/pg"
 
 	"github.com/google/uuid"
 )
+
+type searchOption struct {
+	byRole *accountrole.Role
+	byAny  *string
+}
 
 type paginationOption struct {
 	limit  *int
 	lastID *uuid.UUID
 }
 
-func (m *Module) countAccount() (*int64, error) {
-	return AccountRepository().Count(&pg.CountOption{})
+func (m *Module) countAccount(search *searchOption) (*int64, error) {
+	where := []pg.Where{}
+
+	if search != nil {
+		if search.byRole != nil && len(*search.byRole) > 0 {
+			where = append(where, pg.Where{
+				Query: "role = ?",
+				Args:  []interface{}{search.byRole},
+			})
+		}
+		if search.byAny != nil && len(*search.byAny) > 0 {
+			where = append(where, pg.Where{
+				Query: "name ILIKE ? OR username ILIKE ? OR role ILIKE ?",
+				Args:  []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+			})
+		}
+	}
+	return AccountRepository().Count(&pg.CountOption{
+		Where: &where,
+	})
 }
 
-func (m *Module) getAccountListService(pagination *paginationOption, search *string) (*[]*AccountModel, int, error) {
+func (m *Module) getAccountListService(pagination *paginationOption, search *searchOption) (*[]*AccountModel, int, error) {
 	where := []pg.Where{}
 	limit := 0
 
-	if search != nil && len(*search) > 0 {
-		where = append(where, pg.Where{
-			Query: "name ILIKE ? OR username ILIKE ? OR role ILIKE ?",
-			Args:  []interface{}{"%" + *search + "%", "%" + *search + "%", "%" + *search + "%"},
-		})
+	if search != nil {
+		if search.byRole != nil && len(*search.byRole) > 0 {
+			where = append(where, pg.Where{
+				Query: "role = ?",
+				Args:  []interface{}{search.byRole},
+			})
+		}
+		if search.byAny != nil && len(*search.byAny) > 0 {
+			where = append(where, pg.Where{
+				Query: "name ILIKE ? OR username ILIKE ? OR role ILIKE ?",
+				Args:  []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+			})
+		}
 	}
 
 	if pagination.limit != nil && *pagination.limit > 0 {

@@ -32,7 +32,10 @@ func (m *Module) getAccountList(c *fiber.Ctx) error {
 	accountListData, total, err := m.getAccountListService(&paginationOption{
 		limit:  query.Limit,
 		lastID: query.LastID,
-	}, query.Search)
+	}, &searchOption{
+		byRole: query.SearchByAccountRole,
+		byAny:  query.Search,
+	})
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(&response{
@@ -168,6 +171,36 @@ func (m *Module) deleteAccount(c *fiber.Ctx) error {
 		})
 	}
 
+	accountDetailData, err := m.getAccountDetailService(param.ID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrNotFound.Error()),
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(&response{
+			Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+		})
+	}
+
+	if *accountDetailData.Role == accountrole.ROLE_SUPERADMIN {
+		role := accountrole.ROLE_SUPERADMIN
+		accountCount, err := m.countAccount(&searchOption{
+			byRole: &role,
+		})
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrInternalServerError.Error()),
+			})
+		}
+
+		if *accountCount <= 1 {
+			err := errors.New("unable to delete the last superadmin account")
+			return c.Status(fiber.StatusBadRequest).JSON(&response{
+				Error: helpers.GetErrorMessage(err.Error(), fiber.ErrBadRequest.Error()),
+			})
+		}
+	}
 	if err := m.deleteAccountService(param.ID); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(&response{

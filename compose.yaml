@@ -1,5 +1,5 @@
 services:
-  database:
+  simrs-pg:
     container_name: simrs-pg
     image: docker.io/postgres:alpine
     restart: unless-stopped
@@ -14,9 +14,9 @@ services:
     volumes:
       - ./simrs-pg:/var/lib/postgresql/data:Z
 
-  backend:
+  simrs-be:
     container_name: simrs-be
-    image: simrs-be:distroless-static-debian11
+    image: localhost/simrs-be:distroless-static-debian11
     restart: unless-stopped
     networks:
       - simrs_network
