@@ -4,7 +4,7 @@ services:
     image: docker.io/postgres:alpine
     restart: unless-stopped
     networks:
-      - simrs_network
+      - simrs-network
     ports:
       - "5432:5432"
     env_file:
@@ -19,7 +19,7 @@ services:
     image: localhost/simrs-be:distroless-static-debian11
     restart: unless-stopped
     networks:
-      - simrs_network
+      - simrs-network
     ports:
       - "8080:8080"
     expose:
@@ -29,7 +29,7 @@ services:
     environment:
       TZ: Asia/Jakarta
     depends_on:
-      - database
+      - simrs-pg
 
 networks:
-  simrs_network:
+  simrs-network:
