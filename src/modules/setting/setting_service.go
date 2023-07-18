@@ -15,6 +15,6 @@ func (m *Module) updateSettingService(data *SettingModel) (*SettingModel, error)
 	if err != nil {
 		return nil, err
 	}
-	data.ID = settingData.ID
+	data.Model.ID = settingData.ID
 	return SettingRepository().Update(data)
 }

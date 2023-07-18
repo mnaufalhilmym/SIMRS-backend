@@ -24,6 +24,15 @@ func (*Module) autoMigrate() {
 	}
 }
 
+func (m *Module) createInitialSetting() {
+	if _, err := m.getSettingService(); err == nil {
+		return
+	}
+	if _, err := m.addSettingService(&SettingModel{}); err != nil {
+		logger.Panic(err)
+	}
+}
+
 type settingDB struct {
 	*pg.Service[SettingModel]
 }

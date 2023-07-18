@@ -64,7 +64,7 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 		patientDetailData, err := m.getPatientDetailService(pagination.lastID)
 		if err == nil {
 			where = append(where, pg.Where{
-				Query: "name > ?",
+				Query: "medical_record_number > ?",
 				Args:  []interface{}{patientDetailData.Name},
 			})
 		}
@@ -73,7 +73,7 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 	return PatientRepository().FindAll(&pg.FindAllOption{
 		Where: &where,
 		Limit: &limit,
-		Order: &[]interface{}{"name asc"},
+		Order: &[]interface{}{"medical_record_number asc"},
 	})
 }
 

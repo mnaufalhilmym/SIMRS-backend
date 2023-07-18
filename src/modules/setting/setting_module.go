@@ -26,5 +26,6 @@ func Load() {
 		logger.Panic("module has not been initiated")
 	}
 	settingModule.autoMigrate()
+	settingModule.createInitialSetting()
 	settingModule.controller()
 }

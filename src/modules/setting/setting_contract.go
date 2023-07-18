@@ -5,18 +5,11 @@ type worker struct {
 	Position *string `json:"position"`
 }
 
-type addSettingReq struct {
-	CoverImg *string `json:"coverImg" validate:"required"`
-	Workers  *worker `json:"workers" validate:"required"`
-	Vision   *string `json:"vision" validate:"required"`
-	Mission  *string `json:"mission" validate:"required"`
-}
-
 type updateSettingReq struct {
-	CoverImg *string `json:"coverImg"`
-	Workers  *worker `json:"workers"`
-	Vision   *string `json:"vision"`
-	Mission  *string `json:"mission"`
+	CoverImg *string    `json:"coverImg"`
+	Workers  *[]*worker `json:"workers"`
+	Vision   *string    `json:"vision"`
+	Mission  *string    `json:"mission"`
 }
 
 type response struct {
