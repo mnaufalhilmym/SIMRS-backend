@@ -26,8 +26,8 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 	if search != nil {
 		if search.byMedicalRecordNumber != nil && len(*search.byMedicalRecordNumber) > 0 {
 			where = append(where, pg.Where{
-				Query: "medical_record_number = ?",
-				Args:  []interface{}{search.byMedicalRecordNumber},
+				Query: "medical_record_number ILIKE ?",
+				Args:  []interface{}{*search.byMedicalRecordNumber + "%"},
 			})
 		}
 		if search.byFamilyCardNumber != nil && len(*search.byFamilyCardNumber) > 0 {
