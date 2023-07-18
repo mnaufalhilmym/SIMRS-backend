@@ -220,6 +220,26 @@ func (m *Module) deletePatientExamination(c *fiber.Ctx) error {
 		})
 	}
 
+	limit := 1
+	patientExaminationListData, _, err := m.getPatientExaminationListService(&paginationOption{
+		limit: &limit,
+	}, param.ID, nil)
+	if err != nil {
+		logger.Error(err)
+	}
+	if patientExaminationListData != nil && len(*patientExaminationListData) > 0 {
+		patientDetailData, err := m.getPatientDetailService((*patientExaminationListData)[0].PatientID)
+		if err != nil {
+			logger.Error(err)
+		}
+		if patientDetailData.LastHealthCheckTime.After(*(*patientExaminationListData)[0].ExaminationTime) {
+			patientDetailData.LastHealthCheckTime = (*patientExaminationListData)[0].ExaminationTime
+			if _, err := m.updatePatientService(patientDetailData); err != nil {
+				logger.Error(err)
+			}
+		}
+	}
+
 	return c.Status(fiber.StatusOK).JSON(&response{
 		Data: param.ID,
 	})

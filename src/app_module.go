@@ -12,6 +12,7 @@ import (
 	"simrs/src/modules/district"
 	"simrs/src/modules/patient"
 	patientexamination "simrs/src/modules/patient_examination"
+	"simrs/src/modules/setting"
 	"strconv"
 	"time"
 
@@ -94,4 +95,7 @@ func (m *module) Load() {
 
 	patientexamination.New(&patientexamination.Module{App: m.app})
 	patientexamination.Load()
+
+	setting.New(&setting.Module{App: m.app})
+	setting.Load()
 }

@@ -13,6 +13,7 @@ type PatientModel struct {
 	FamilyCardNumber               *string               `json:"familyCardNumber"`
 	RelationshipInFamily           *relationshipInFamily `json:"relationshipInFamily"`
 	PopulationIdentificationNumber *string               `json:"populationIdentificationNumber"`
+	Salutation                     *salutation           `json:"salutation"`
 	Name                           *string               `json:"name"`
 	Gender                         *gender               `json:"gender"`
 	PlaceOfBirth                   *string               `json:"placeOfBirth"`

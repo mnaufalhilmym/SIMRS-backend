@@ -14,3 +14,12 @@ const (
 	RELATION_WIFE         relationshipInFamily = "WIFE"
 	RELATION_CHILD        relationshipInFamily = "CHILD"
 )
+
+type salutation string
+
+const (
+	SALUTATION_MR    salutation = "MR"
+	SALUTATION_MRS   salutation = "MRS"
+	SALUTATION_MISS  salutation = "MISS"
+	SALUTATION_CHILD salutation = "CHILD"
+)

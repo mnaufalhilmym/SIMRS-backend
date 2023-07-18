@@ -31,6 +31,7 @@ type addPatientReq struct {
 	FamilyCardNumber               *string               `json:"familyCardNumber" validate:"required"`
 	RelationshipInFamily           *relationshipInFamily `json:"relationshipInFamily" validate:"required"`
 	PopulationIdentificationNumber *string               `json:"populationIdentificationNumber" validate:"required"`
+	Salutation                     *salutation           `json:"salutation" validate:"required"`
 	Name                           *string               `json:"name" validate:"required"`
 	Gender                         *gender               `json:"gender" validate:"required"`
 	PlaceOfBirth                   *string               `json:"placeOfBirth" validate:"required"`
@@ -54,6 +55,7 @@ type updatePatientReq struct {
 	FamilyCardNumber               *string               `json:"familyCardNumber"`
 	RelationshipInFamily           *relationshipInFamily `json:"relationshipInFamily"`
 	PopulationIdentificationNumber *string               `json:"populationIdentificationNumber"`
+	Salutation                     *salutation           `json:"salutation"`
 	Name                           *string               `json:"name"`
 	Gender                         *gender               `json:"gender"`
 	PlaceOfBirth                   *string               `json:"placeOfBirth"`
