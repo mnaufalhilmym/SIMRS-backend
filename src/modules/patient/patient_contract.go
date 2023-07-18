@@ -7,6 +7,7 @@ import (
 )
 
 type getPatientListReqQuery struct {
+	SearchByMedicalRecordNumber  *string               `query:"searchByMedicalRecordNumber"`
 	SearchByFamilyCardNumber     *string               `query:"searchByFamilyCardNumber"`
 	SearchByRelationshipInFamily *relationshipInFamily `query:"searchByRelationshipInFamily"`
 	SearchByDistrictID           *uuid.UUID            `query:"searchByDistrictId"`

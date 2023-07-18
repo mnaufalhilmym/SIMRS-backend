@@ -35,6 +35,7 @@ func (m *Module) getPatientList(c *fiber.Ctx) error {
 		limit:  query.Limit,
 		lastID: query.LastID,
 	}, &searchOption{
+		byMedicalRecordNumber:  query.SearchByMedicalRecordNumber,
 		byFamilyCardNumber:     query.SearchByFamilyCardNumber,
 		byRelationshipInFamily: query.SearchByRelationshipInFamily,
 		byDistrictID:           query.SearchByDistrictID,

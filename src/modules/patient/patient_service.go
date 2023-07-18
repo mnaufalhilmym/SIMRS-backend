@@ -7,6 +7,7 @@ import (
 )
 
 type searchOption struct {
+	byMedicalRecordNumber  *string
 	byFamilyCardNumber     *string
 	byRelationshipInFamily *relationshipInFamily
 	byDistrictID           *uuid.UUID
@@ -23,6 +24,12 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 	limit := 0
 
 	if search != nil {
+		if search.byMedicalRecordNumber != nil && len(*search.byMedicalRecordNumber) > 0 {
+			where = append(where, pg.Where{
+				Query: "medical_record_number = ?",
+				Args:  []interface{}{search.byMedicalRecordNumber},
+			})
+		}
 		if search.byFamilyCardNumber != nil && len(*search.byFamilyCardNumber) > 0 {
 			where = append(where, pg.Where{
 				Query: "family_card_number = ?",
@@ -57,8 +64,8 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 		patientDetailData, err := m.getPatientDetailService(pagination.lastID)
 		if err == nil {
 			where = append(where, pg.Where{
-				Query: "last_health_check_time < ?",
-				Args:  []interface{}{patientDetailData.LastHealthCheckTime},
+				Query: "name > ?",
+				Args:  []interface{}{patientDetailData.Name},
 			})
 		}
 	}
@@ -66,7 +73,7 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 	return PatientRepository().FindAll(&pg.FindAllOption{
 		Where: &where,
 		Limit: &limit,
-		Order: &[]interface{}{"last_health_check_time desc"},
+		Order: &[]interface{}{"name asc"},
 	})
 }
 
