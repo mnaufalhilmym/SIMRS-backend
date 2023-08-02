@@ -29,7 +29,7 @@ func (m *Module) getAccountList(c *fiber.Ctx) error {
 		})
 	}
 
-	accountListData, total, err := m.getAccountListService(&paginationOption{
+	accountListData, page, err := m.getAccountListService(&paginationOption{
 		limit:  query.Limit,
 		lastID: query.LastID,
 	}, &searchOption{
@@ -49,7 +49,9 @@ func (m *Module) getAccountList(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(&response{
 		Pagination: &pagination{
-			Total: &total,
+			Count: page.count,
+			Limit: page.limit,
+			Total: page.total,
 		},
 		Data: accountListData,
 	})

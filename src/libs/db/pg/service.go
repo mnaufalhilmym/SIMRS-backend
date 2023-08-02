@@ -20,20 +20,6 @@ func NewService[T any](service *Service[T]) *Service[T] {
 	return service
 }
 
-type Where struct {
-	Query interface{}
-	Args  []interface{}
-}
-
-type IncludeTables struct {
-	Query string
-	Args  []interface{}
-}
-
-type CountOption struct {
-	Where *[]Where
-}
-
 func (s *Service[T]) Count(countOption *CountOption) (*int64, error) {
 	docStruct := s.Model
 
@@ -56,12 +42,6 @@ func (s *Service[T]) Count(countOption *CountOption) (*int64, error) {
 	}
 
 	return count, nil
-}
-
-type FindOneOption struct {
-	Where         *[]Where
-	Order         *[]interface{}
-	IncludeTables *[]IncludeTables
 }
 
 func (s *Service[T]) FindOne(findOption *FindOneOption) (*T, error) {
@@ -97,15 +77,7 @@ func (s *Service[T]) FindOne(findOption *FindOneOption) (*T, error) {
 	return &docStruct, nil
 }
 
-type FindAllOption struct {
-	Where         *[]Where
-	Order         *[]interface{}
-	Limit         *int
-	Offset        *int
-	IncludeTables *[]IncludeTables
-}
-
-func (s *Service[T]) FindAll(findOption *FindAllOption) (*[]*T, int, error) {
+func (s *Service[T]) FindAll(findOption *FindAllOption) (*[]*T, *Pagination, error) {
 	docStruct := []*T{}
 
 	selectQuery := s.DB.Model(&docStruct)
@@ -130,13 +102,14 @@ func (s *Service[T]) FindAll(findOption *FindAllOption) (*[]*T, int, error) {
 	selectQuery.Count(&total)
 
 	if findOption.Limit != nil && *findOption.Limit > 0 {
-		if *findOption.Limit > FindAllLimit {
-			*findOption.Limit = FindAllLimit
+		if *findOption.Limit > FindAllMaximumLimit {
+			*findOption.Limit = FindAllMaximumLimit
 		}
-		selectQuery = selectQuery.Limit(*findOption.Limit)
 	} else {
-		selectQuery = selectQuery.Limit(FindAllDefault)
+		*findOption.Limit = FindAllDefaultLimit
 	}
+	selectQuery = selectQuery.Limit(*findOption.Limit)
+
 	if findOption.Offset != nil && *findOption.Offset > 0 {
 		selectQuery = selectQuery.Offset(*findOption.Offset)
 	}
@@ -147,14 +120,14 @@ func (s *Service[T]) FindAll(findOption *FindAllOption) (*[]*T, int, error) {
 		} else {
 			logger.Error(err)
 		}
-		return nil, 0, err
+		return nil, nil, err
 	}
 
-	return &docStruct, int(total), nil
-}
-
-type CreateOption struct {
-	IsUpsert bool
+	return &docStruct, &Pagination{
+		Count: len(docStruct),
+		Limit: *findOption.Limit,
+		Total: int(total),
+	}, nil
 }
 
 func (s *Service[T]) Create(data *T, createOption ...*CreateOption) (*T, error) {
@@ -203,10 +176,6 @@ func (s *Service[T]) BulkCreate(data *[]*T, createOption ...*CreateOption) (*[]*
 	return data, nil
 }
 
-type UpdateOption struct {
-	Where *[]Where
-}
-
 func (s *Service[T]) Update(data *T, updateOption ...*UpdateOption) (*T, error) {
 	if err := validator.Struct(data); err != nil {
 		logger.Log(err)
@@ -253,10 +222,6 @@ func (s *Service[T]) BulkUpdate(data *[]*T, updateOption ...*UpdateOption) (*[]*
 	return data, nil
 }
 
-type ReplaceOption struct {
-	Where *[]Where
-}
-
 func (s *Service[T]) Replace(data *T, replaceOption ...*ReplaceOption) error {
 	if err := validator.Struct(data); err != nil {
 		logger.Log(err)
@@ -277,10 +242,6 @@ func (s *Service[T]) Replace(data *T, replaceOption ...*ReplaceOption) error {
 	}
 
 	return nil
-}
-
-type DestroyOption struct {
-	Where *[]Where
 }
 
 func (s *Service[T]) Destroy(data *T, destroyOption ...*DestroyOption) error {

@@ -35,5 +35,7 @@ type response struct {
 }
 
 type pagination struct {
+	Count *int `json:"count,omitempty"`
+	Limit *int `json:"limit,omitempty"`
 	Total *int `json:"total,omitempty"`
 }

@@ -11,7 +11,13 @@ type paginationOption struct {
 	lastID *uuid.UUID
 }
 
-func (m *Module) getDistrictListService(pagination *paginationOption, search *string) (*[]*DistrictModel, int, error) {
+type paginationQuery struct {
+	count *int
+	limit *int
+	total *int
+}
+
+func (m *Module) getDistrictListService(pagination *paginationOption, search *string) (*[]*DistrictModel, *paginationQuery, error) {
 	where := []pg.Where{}
 	limit := 0
 
@@ -36,11 +42,13 @@ func (m *Module) getDistrictListService(pagination *paginationOption, search *st
 		}
 	}
 
-	return DistrictRepository().FindAll(&pg.FindAllOption{
+	data, page, err := DistrictRepository().FindAll(&pg.FindAllOption{
 		Where: &where,
 		Limit: &limit,
 		Order: &[]interface{}{"updated_at desc"},
 	})
+
+	return data, &paginationQuery{count: &page.Count, limit: &page.Limit, total: &page.Total}, err
 }
 
 func (m *Module) getDistrictDetailService(id *uuid.UUID) (*DistrictModel, error) {

@@ -31,7 +31,7 @@ func (m *Module) getPatientList(c *fiber.Ctx) error {
 		})
 	}
 
-	patientListData, total, err := m.getPatientListService(&paginationOption{
+	patientListData, page, err := m.getPatientListService(&paginationOption{
 		limit:  query.Limit,
 		lastID: query.LastID,
 	}, &searchOption{
@@ -54,7 +54,9 @@ func (m *Module) getPatientList(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(&response{
 		Pagination: &pagination{
-			Total: &total,
+			Count: page.count,
+			Limit: page.limit,
+			Total: page.total,
 		},
 		Data: patientListData,
 	})

@@ -1,6 +1,6 @@
 package pg
 
 const (
-	FindAllDefault = 15
-	FindAllLimit   = 100
+	FindAllDefaultLimit = 15
+	FindAllMaximumLimit = 100
 )

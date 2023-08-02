@@ -16,12 +16,9 @@ type signInRes struct {
 }
 
 type accountRes struct {
-	Name *string           `json:"name"`
-	Role *accountrole.Role `json:"role"`
-}
-
-type renewTokenRes struct {
-	Token *string `json:"token"`
+	Token *string           `json:"token"`
+	Name  *string           `json:"name"`
+	Role  *accountrole.Role `json:"role"`
 }
 
 type response struct {

@@ -7,8 +7,9 @@ import (
 )
 
 type JwtPayload struct {
-	ID   *uuid.UUID        `json:"id"`
-	Role *accountrole.Role `json:"role"`
+	ID         *uuid.UUID        `json:"id"`
+	Role       *accountrole.Role `json:"role"`
+	Expiration *int64            `json:"exp"`
 }
 
 type JwtCtxKey string

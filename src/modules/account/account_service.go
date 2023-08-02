@@ -17,6 +17,12 @@ type paginationOption struct {
 	lastID *uuid.UUID
 }
 
+type paginationQuery struct {
+	count *int
+	limit *int
+	total *int
+}
+
 func (m *Module) countAccount(search *searchOption) (*int64, error) {
 	where := []pg.Where{}
 
@@ -39,7 +45,7 @@ func (m *Module) countAccount(search *searchOption) (*int64, error) {
 	})
 }
 
-func (m *Module) getAccountListService(pagination *paginationOption, search *searchOption) (*[]*AccountModel, int, error) {
+func (m *Module) getAccountListService(pagination *paginationOption, search *searchOption) (*[]*AccountModel, *paginationQuery, error) {
 	where := []pg.Where{}
 	limit := 0
 
@@ -72,11 +78,13 @@ func (m *Module) getAccountListService(pagination *paginationOption, search *sea
 		}
 	}
 
-	return AccountRepository().FindAll(&pg.FindAllOption{
+	data, page, err := AccountRepository().FindAll(&pg.FindAllOption{
 		Where: &where,
 		Limit: &limit,
 		Order: &[]interface{}{"last_activity_time desc"},
 	})
+
+	return data, &paginationQuery{count: &page.Count, limit: &page.Limit, total: &page.Total}, err
 }
 
 func (m *Module) getAccountDetailService(id *uuid.UUID) (*AccountModel, error) {

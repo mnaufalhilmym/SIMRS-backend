@@ -12,7 +12,13 @@ type paginationOption struct {
 	lastID *uuid.UUID
 }
 
-func (m *Module) getPatientExaminationListService(pagination *paginationOption, patientID *uuid.UUID, search *string) (*[]*PatientExaminationModel, int, error) {
+type paginationQuery struct {
+	count *int
+	limit *int
+	total *int
+}
+
+func (m *Module) getPatientExaminationListService(pagination *paginationOption, patientID *uuid.UUID, search *string) (*[]*PatientExaminationModel, *paginationQuery, error) {
 	where := []pg.Where{}
 	limit := 0
 
@@ -44,11 +50,13 @@ func (m *Module) getPatientExaminationListService(pagination *paginationOption, 
 		}
 	}
 
-	return PatientExaminationRepository().FindAll(&pg.FindAllOption{
+	data, page, err := PatientExaminationRepository().FindAll(&pg.FindAllOption{
 		Where: &where,
 		Limit: &limit,
 		Order: &[]interface{}{"examination_time desc"},
 	})
+
+	return data, &paginationQuery{count: &page.Count, limit: &page.Limit, total: &page.Total}, err
 }
 
 func (m *Module) getPatientExaminationDetailService(id *uuid.UUID) (*PatientExaminationModel, error) {

@@ -29,9 +29,11 @@ func Create[T any](data *T) (*string, error) {
 	sonic.Unmarshal(jwtDataBytes, &jwtDataMap)
 
 	for key, value := range jwtDataMap {
-		if err := token.Set(key, value); err != nil {
-			logger.Error(err)
-			return nil, err
+		if value != nil {
+			if err := token.Set(key, value); err != nil {
+				logger.Error(err)
+				return nil, err
+			}
 		}
 	}
 

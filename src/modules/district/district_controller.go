@@ -29,7 +29,7 @@ func (m *Module) getDistrictList(c *fiber.Ctx) error {
 		})
 	}
 
-	districtListData, total, err := m.getDistrictListService(&paginationOption{
+	districtListData, page, err := m.getDistrictListService(&paginationOption{
 		limit:  query.Limit,
 		lastID: query.LastID,
 	}, query.Search)
@@ -46,7 +46,9 @@ func (m *Module) getDistrictList(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(&response{
 		Pagination: &pagination{
-			Total: &total,
+			Count: page.count,
+			Limit: page.limit,
+			Total: page.total,
 		},
 		Data: districtListData,
 	})
