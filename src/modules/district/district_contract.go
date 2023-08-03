@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type getDistrictListReqQuery struct {
 	Search *string    `query:"search"`
-	Limit  *int       `query:"limiy"`
+	Limit  *int       `query:"limit"`
 	LastID *uuid.UUID `query:"lastId"`
 }
 

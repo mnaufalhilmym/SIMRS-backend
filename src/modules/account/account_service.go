@@ -46,20 +46,22 @@ func (m *Module) countAccount(search *searchOption) (*int64, error) {
 }
 
 func (m *Module) getAccountListService(pagination *paginationOption, search *searchOption) (*[]*AccountModel, *paginationQuery, error) {
-	where := []pg.Where{}
+	where := []pg.FindAllWhere{}
 	limit := 0
 
 	if search != nil {
 		if search.byRole != nil && len(*search.byRole) > 0 {
-			where = append(where, pg.Where{
-				Query: "role = ?",
-				Args:  []interface{}{search.byRole},
+			where = append(where, pg.FindAllWhere{
+				Query:          "role = ?",
+				Args:           []interface{}{search.byRole},
+				IncludeInCount: true,
 			})
 		}
 		if search.byAny != nil && len(*search.byAny) > 0 {
-			where = append(where, pg.Where{
-				Query: "name ILIKE ? OR username ILIKE ? OR role ILIKE ?",
-				Args:  []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+			where = append(where, pg.FindAllWhere{
+				Query:          "name ILIKE ? OR username ILIKE ? OR role ILIKE ?",
+				Args:           []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+				IncludeInCount: true,
 			})
 		}
 	}
@@ -71,9 +73,10 @@ func (m *Module) getAccountListService(pagination *paginationOption, search *sea
 	if pagination.lastID != nil && len(*pagination.lastID) > 0 {
 		accountDetailData, err := m.getAccountDetailService(pagination.lastID)
 		if err == nil {
-			where = append(where, pg.Where{
-				Query: "last_activity_time < ?",
-				Args:  []interface{}{accountDetailData.LastActivityTime},
+			where = append(where, pg.FindAllWhere{
+				Query:          "last_activity_time < ?",
+				Args:           []interface{}{accountDetailData.LastActivityTime},
+				IncludeInCount: false,
 			})
 		}
 	}

@@ -26,38 +26,43 @@ type paginationQuery struct {
 }
 
 func (m *Module) getPatientListService(pagination *paginationOption, search *searchOption) (*[]*PatientModel, *paginationQuery, error) {
-	where := []pg.Where{}
+	where := []pg.FindAllWhere{}
 	limit := 0
 
 	if search != nil {
 		if search.byMedicalRecordNumber != nil && len(*search.byMedicalRecordNumber) > 0 {
-			where = append(where, pg.Where{
-				Query: "medical_record_number ILIKE ?",
-				Args:  []interface{}{*search.byMedicalRecordNumber + "%"},
+			where = append(where, pg.FindAllWhere{
+				Query:          "medical_record_number ILIKE ?",
+				Args:           []interface{}{*search.byMedicalRecordNumber + "%"},
+				IncludeInCount: true,
 			})
 		}
 		if search.byFamilyCardNumber != nil && len(*search.byFamilyCardNumber) > 0 {
-			where = append(where, pg.Where{
-				Query: "family_card_number = ?",
-				Args:  []interface{}{search.byFamilyCardNumber},
+			where = append(where, pg.FindAllWhere{
+				Query:          "family_card_number = ?",
+				Args:           []interface{}{search.byFamilyCardNumber},
+				IncludeInCount: true,
 			})
 		}
 		if search.byRelationshipInFamily != nil && len(*search.byRelationshipInFamily) > 0 {
-			where = append(where, pg.Where{
-				Query: "byRelationship_in_family = ?",
-				Args:  []interface{}{search.byRelationshipInFamily},
+			where = append(where, pg.FindAllWhere{
+				Query:          "byRelationship_in_family = ?",
+				Args:           []interface{}{search.byRelationshipInFamily},
+				IncludeInCount: true,
 			})
 		}
 		if search.byDistrictID != nil && len(*search.byDistrictID) > 0 {
-			where = append(where, pg.Where{
-				Query: "district_id = ?",
-				Args:  []interface{}{search.byDistrictID},
+			where = append(where, pg.FindAllWhere{
+				Query:          "district_id = ?",
+				Args:           []interface{}{search.byDistrictID},
+				IncludeInCount: true,
 			})
 		}
 		if search.byAny != nil && len(*search.byAny) > 0 {
-			where = append(where, pg.Where{
-				Query: "medical_record_number ILIKE ? OR family_card_number ILIKE ? OR population_identification_number ILIKE ? OR name ILIKE ?",
-				Args:  []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+			where = append(where, pg.FindAllWhere{
+				Query:          "medical_record_number ILIKE ? OR family_card_number ILIKE ? OR population_identification_number ILIKE ? OR name ILIKE ?",
+				Args:           []interface{}{"%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%", "%" + *search.byAny + "%"},
+				IncludeInCount: true,
 			})
 		}
 	}
@@ -69,9 +74,10 @@ func (m *Module) getPatientListService(pagination *paginationOption, search *sea
 	if pagination.lastID != nil && len(*pagination.lastID) > 0 {
 		patientDetailData, err := m.getPatientDetailService(pagination.lastID)
 		if err == nil {
-			where = append(where, pg.Where{
-				Query: "medical_record_number > ?",
-				Args:  []interface{}{patientDetailData.Name},
+			where = append(where, pg.FindAllWhere{
+				Query:          "medical_record_number > ?",
+				Args:           []interface{}{patientDetailData.MedicalRecordNumber},
+				IncludeInCount: false,
 			})
 		}
 	}

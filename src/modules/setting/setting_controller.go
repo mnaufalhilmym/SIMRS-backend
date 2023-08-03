@@ -16,7 +16,7 @@ import (
 )
 
 func (m *Module) controller() {
-	m.App.Get("/api/v1/setting", authguard.AuthGuard(accountrole.ROLE_SUPERADMIN), account.UpdateAccountLastActivityTime(), m.getSetting)
+	m.App.Get("/api/v1/setting", authguard.AuthGuard(accountrole.ROLE_ADMIN, accountrole.ROLE_SUPERADMIN), account.UpdateAccountLastActivityTime(), m.getSetting)
 	m.App.Put("/api/v1/setting", authguard.AuthGuard(accountrole.ROLE_SUPERADMIN), account.UpdateAccountLastActivityTime(), m.updateSetting)
 }
 

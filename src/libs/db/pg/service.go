@@ -87,19 +87,31 @@ func (s *Service[T]) FindAll(findOption *FindAllOption) (*[]*T, *Pagination, err
 			selectQuery = selectQuery.Preload(table.Query, table.Args...)
 		}
 	}
+
 	if findOption.Where != nil {
 		for _, where := range *findOption.Where {
-			selectQuery = selectQuery.Where(where.Query, where.Args...)
-		}
-	}
-	if findOption.Order != nil {
-		for _, order := range *findOption.Order {
-			selectQuery = selectQuery.Order(order)
+			if where.IncludeInCount {
+				selectQuery = selectQuery.Where(where.Query, where.Args...)
+			}
 		}
 	}
 
 	var total int64
 	selectQuery.Count(&total)
+
+	if findOption.Where != nil {
+		for _, where := range *findOption.Where {
+			if !where.IncludeInCount {
+				selectQuery = selectQuery.Where(where.Query, where.Args...)
+			}
+		}
+	}
+
+	if findOption.Order != nil {
+		for _, order := range *findOption.Order {
+			selectQuery = selectQuery.Order(order)
+		}
+	}
 
 	if findOption.Limit != nil && *findOption.Limit > 0 {
 		if *findOption.Limit > FindAllMaximumLimit {

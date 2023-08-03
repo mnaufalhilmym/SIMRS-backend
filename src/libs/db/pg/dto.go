@@ -1,8 +1,16 @@
 package pg
 
+import "github.com/google/uuid"
+
 type Where struct {
 	Query interface{}
 	Args  []interface{}
+}
+
+type FindAllWhere struct {
+	Query          interface{}
+	Args           []interface{}
+	IncludeInCount bool
 }
 
 type IncludeTables struct {
@@ -21,10 +29,11 @@ type FindOneOption struct {
 }
 
 type FindAllOption struct {
-	Where         *[]Where
+	Where         *[]FindAllWhere
 	Order         *[]interface{}
 	Limit         *int
 	Offset        *int
+	AfterID       *uuid.UUID
 	IncludeTables *[]IncludeTables
 }
 

@@ -18,13 +18,14 @@ type paginationQuery struct {
 }
 
 func (m *Module) getDistrictListService(pagination *paginationOption, search *string) (*[]*DistrictModel, *paginationQuery, error) {
-	where := []pg.Where{}
+	where := []pg.FindAllWhere{}
 	limit := 0
 
 	if search != nil && len(*search) > 0 {
-		where = append(where, pg.Where{
-			Query: "name ILIKE ?",
-			Args:  []interface{}{"%" + *search + "%"},
+		where = append(where, pg.FindAllWhere{
+			Query:          "name ILIKE ?",
+			Args:           []interface{}{"%" + *search + "%"},
+			IncludeInCount: true,
 		})
 	}
 
@@ -35,9 +36,10 @@ func (m *Module) getDistrictListService(pagination *paginationOption, search *st
 	if pagination.lastID != nil && len(*pagination.lastID) > 0 {
 		districtDetailData, err := m.getDistrictDetailService(pagination.lastID)
 		if err == nil {
-			where = append(where, pg.Where{
-				Query: "updated_at < ?",
-				Args:  []interface{}{districtDetailData.UpdatedAt},
+			where = append(where, pg.FindAllWhere{
+				Query:          "updated_at < ?",
+				Args:           []interface{}{districtDetailData.UpdatedAt},
+				IncludeInCount: false,
 			})
 		}
 	}

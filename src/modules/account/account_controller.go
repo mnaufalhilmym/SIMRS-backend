@@ -8,6 +8,7 @@ import (
 	"simrs/src/libs/hash/argon2"
 	"simrs/src/libs/parser"
 	"simrs/src/middlewares/authguard"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -97,11 +98,13 @@ func (m *Module) addAccount(c *fiber.Ctx) error {
 		})
 	}
 
+	initialActivityTime := time.Unix(0, 0)
 	accountDetailData, err := m.addAccountService(&AccountModel{
-		Name:     req.Name,
-		Username: req.Username,
-		Password: encodedHash,
-		Role:     req.Role,
+		Name:             req.Name,
+		Username:         req.Username,
+		Password:         encodedHash,
+		Role:             req.Role,
+		LastActivityTime: &initialActivityTime,
 	})
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&response{
