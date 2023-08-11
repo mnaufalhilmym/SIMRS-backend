@@ -10,26 +10,42 @@ services:
     env_file:
       - .env.prod
     environment:
-      TZ: Asia/Jakarta
+      TZ: Asia/Makassar
     volumes:
       - ../volume/simrs-pg:/var/lib/postgresql/data:Z
 
-  # simrs-be:
-  #   container_name: simrs-be
-  #   image: localhost/simrs-be:distroless-static-debian11
-  #   restart: unless-stopped
-  #   networks:
-  #     - simrs-network
-  #   ports:
-  #     - "8080:8080"
-  #   expose:
-  #     - "8080"
-  #   env_file:
-  #     - .env.prod
-  #   environment:
-  #     TZ: Asia/Jakarta
-  #   depends_on:
-  #     - simrs-pg
+  simrs-be:
+    container_name: simrs-be
+    image: localhost/simrs-be:distroless-static-debian11
+    restart: unless-stopped
+    networks:
+      - simrs-network
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    env_file:
+      - .env.prod
+    environment:
+      TZ: Asia/Makassar
+    depends_on:
+      - simrs-pg
+
+  simrs-fe:
+    container_name: simrs-fe
+    image: localhost/simrs-fe:node-18
+    restart: unless-stopped
+    networks:
+      - simrs-network
+    ports:
+      - "80:4173"
+    expose:
+      - "80"
+    environment:
+      TZ: Asia/Makassar
+    depends_on:
+      - simrs-be
+    
 
 networks:
   simrs-network:

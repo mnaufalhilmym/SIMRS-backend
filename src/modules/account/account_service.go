@@ -74,8 +74,8 @@ func (m *Module) getAccountListService(pagination *paginationOption, search *sea
 		accountDetailData, err := m.getAccountDetailService(pagination.lastID)
 		if err == nil {
 			where = append(where, pg.FindAllWhere{
-				Query:          "last_activity_time < ?",
-				Args:           []interface{}{accountDetailData.LastActivityTime},
+				Query:          "last_activity_time <= ? AND updated_at < ?",
+				Args:           []interface{}{accountDetailData.LastActivityTime, accountDetailData.UpdatedAt},
 				IncludeInCount: false,
 			})
 		}
@@ -84,7 +84,7 @@ func (m *Module) getAccountListService(pagination *paginationOption, search *sea
 	data, page, err := AccountRepository().FindAll(&pg.FindAllOption{
 		Where: &where,
 		Limit: &limit,
-		Order: &[]interface{}{"last_activity_time desc"},
+		Order: &[]interface{}{"last_activity_time desc", "updated_at desc"},
 	})
 
 	return data, &paginationQuery{count: &page.Count, limit: &page.Limit, total: &page.Total}, err
